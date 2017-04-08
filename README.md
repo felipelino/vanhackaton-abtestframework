@@ -73,6 +73,7 @@ Pre-requisites
  - Java JDK 8
  - Spring Context
  - Logback
+ - AspecJ
 
 
 ----------
