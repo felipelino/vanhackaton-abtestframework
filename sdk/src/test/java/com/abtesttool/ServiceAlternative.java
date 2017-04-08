@@ -7,6 +7,5 @@ import com.abtesttool.annotations.AlternativeMethod;
  */
 public interface ServiceAlternative {
 
-    @AlternativeMethod
     String doSomething(int value);
 }

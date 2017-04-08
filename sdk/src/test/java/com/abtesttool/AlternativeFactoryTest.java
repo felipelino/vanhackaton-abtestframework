@@ -2,6 +2,7 @@ package com.abtesttool;
 
 import com.abtesttool.core.Alternative;
 import com.abtesttool.core.AlternativeFactory;
+import com.abtesttool.core.AlternativeFactoryImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,8 @@ public class AlternativeFactoryTest {
     public void getAlternative() throws Exception {
         int countA = 0;
         int countB = 0;
-        for(int i = 0; i < 100 ; i++) {
+        int totalRepetitions = 10000;
+        for(int i = 0; i < 10000 ; i++) {
             Alternative alternative = alternativeFactory.getAlternativeByExperiment("expOne");
             if(alternative.getAlternativeId().equalsIgnoreCase("A")) {
                 countA++;
@@ -30,8 +32,16 @@ public class AlternativeFactoryTest {
                 countB++;
             }
         }
-        boolean result = Math.abs(countA - countB) <= 5 ; //5% of tolerance for probability error
+        float percentFault = (Math.abs(countA - countB) * 100) / totalRepetitions;
+        boolean result =  (percentFault<= 5) ; //5% of tolerance for probability error
         Assert.assertTrue(  result );
+    }
+
+    @Test
+    public void interceptor() {
+        ServiceAlternative serviceAlternative = (ServiceAlternative) alternativeFactory.getAlternativeImplementation("expOne");
+        String result = serviceAlternative.doSomething(7);
+        Assert.assertNotNull(result);
     }
 
 }

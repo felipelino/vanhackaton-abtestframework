@@ -11,8 +11,7 @@ Usage
 You have a interface that could have more than one implementation. Each Implementation is an alternative.
 
     public interface ServiceAlternative {
-        @AlternativeMethod(sendOutput = true)
-        String doSomething(@AlternativeInfo(send=true) int value);
+        String doSomething(int value);
     }
 
 Two alternative implementations each one with 50% of probability to be choose:
@@ -21,7 +20,8 @@ Alternative A:
     @Service(value = "alternativeA")
     @AlternativeClass(experimentId = "expOne", alternativeId = "A", probability = 0.5f)
     public class ServiceAlternativeA implements ServiceAlternative {
-        public String doSomething(int value) {
+    	@AlternativeMethod(sendOutput = true)
+        public String doSomething(@AlternativeInfo(send=true) int value) {
             return "Value:["+value+"]";
         }
     }
@@ -31,7 +31,8 @@ Alternative B:
     @Service(value = "alternativeB")
     @AlternativeClass(experimentId = "expOne", alternativeId = "B", probability = 0.5f)
     public class ServiceAlternativeB implements ServiceAlternative {
-        public String doSomething(int value) {
+    	@AlternativeMethod(sendOutput = true)
+        public String doSomething(@AlternativeInfo(send=true) int value) {
             return "Value:["+value+"]";
         }
     }
@@ -48,8 +49,8 @@ The service who should use one of the alternatives:
         
         public void doTooMuchThings(  ) {
         
-       		ServiceAlternative serviceAlternative = alternativeFactory.getAlternativeImplementation("expOne");
-        		String resp = alternative.doSomething(7);
+       		ServiceAlternative serviceAlternative = (ServiceAlternative) alternativeFactory.getAlternativeImplementation("expOne");
+        	String resp = alternative.doSomething(7);
        		...
        	}
     }
